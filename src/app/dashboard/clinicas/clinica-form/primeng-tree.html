@@ -1,0 +1,12 @@
+<div class="card">
+    <h5>Single</h5>
+    <p-treeSelect [(ngModel)]="selectedNode" [options]="arbol1" placeholder="Select Item"></p-treeSelect>
+
+    <h5>Multiple</h5>
+    <p-treeSelect [(ngModel)]="selectedNodes1" [options]="arbol2" [metaKeySelection]="false" selectionMode="multiple"
+        placeholder="Select Item"></p-treeSelect>
+
+    <h5>Checkbox</h5>
+    <p-treeSelect [(ngModel)]="selectedNodes2" [options]="arbol3" display="chip" [metaKeySelection]="false"
+        selectionMode="checkbox" placeholder="Select Item"></p-treeSelect>
+</div>

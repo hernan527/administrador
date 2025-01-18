@@ -1,0 +1,91 @@
+<form class="plan-form" autocomplete="off" [formGroup]="planForm" (ngSubmit)="submitForm()">
+  <div class="form-floating mb-3">
+    <input class="form-control" type="text" id="_id" formControlName="_id" placeholder="ID" required>
+    <label for="id">id</label>
+  </div>
+  <div class="form-floating mb-3">
+    <label htmlFor="nombre">Nombre</label>
+    <input pInputText id="name" type="text" formControlName="name" placeholder="Plan Bronce" required/>
+  </div>   
+  
+  <!-- <div class="form-floating mb-3">
+    <label htmlFor="rating">Rating</label>
+    <p-rating formControlName="rating"></p-rating>
+</div> -->
+  
+    <!-- <br><br>
+    <label htmlFor="copagos">Copagos</label>
+    <p-inputSwitch formControlName="copagos"></p-inputSwitch>
+       <br>
+   <br> -->
+  <label for="category">Category</label>
+  <p-dropdown [options]="categorias" formControlName="category" placeholder="Categoria" [showClear]="true"></p-dropdown>
+ 
+  <label for="tags">Etiquetas</label>
+ 
+  
+  <label htmlFor="hijosSoloss">Hijos Solos?</label> 
+   
+  <p-inputSwitch formControlName="hijosSolos"></p-inputSwitch>
+  <br><br>
+
+<!--    
+    <ng-container formArrayName="attributes">
+      <ng-container *ngFor="let attributeGroup of attributes.controls; let i = index">
+        <div [formGroupName]="i">
+          <div>
+            <input id="id" type="text" formControlName="id" />
+            <input id="name" type="text" formControlName="name" />   
+          </div>             
+        </div>
+      </ng-container>
+    </ng-container>
+    <button type="button" (click)="addNewAttribute()">Add</button> -->
+    
+    <div formArrayName="tags">
+      <div *ngFor="let tagControl of tags.controls; let i = index">
+        <div class="chip">
+          {{ tagControl.value }}
+          <button type="button" (click)="removeTag(i)">x</button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Agregar nuevos chips -->
+    <input formControlName="newTag" placeholder="Agregar nuevo tag" (keydown.enter)="addTag()"><!--     
+  <div class="form-floating mb-3">
+     
+    <input class="form-control" type="text" id="folletos" formControlName="folletos" placeholder="Folletos">
+    <label for="folleto">Folletos</label>
+  </div> -->
+
+  <div class="form-floating mb-3">
+     
+    <input class="form-control" type="text" id="clinicas" formControlName="clinicas" placeholder="Clinicas">
+    <label for="clinicas">Clinicas</label>
+  </div>
+  
+  
+  
+  
+  
+  
+
+    
+   
+    
+    
+    
+    
+   
+    
+  
+
+  <div class="m-2">
+    <button type="submit" pButton pRipple [label]="buttonText" icon="pi pi-plus" class="p-button-success mr-2" [disabled]="planForm.invalid"></button>
+    <button type="button" pButton pRipple label="Cancelar" icon="pi pi-trash" class="p-button-danger" (click)="cancelarDialogo()"></button>
+  </div>
+   
+  </form>
+
+ 

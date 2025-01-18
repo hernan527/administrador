@@ -1,0 +1,12 @@
+.plan-form { 
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .thumbnail {
+    width: 100px; /* Adjust the width and height as needed */
+    height: 100px;
+    margin: 5px;
+  }
+  /* Estilos para el botón mini-fab */

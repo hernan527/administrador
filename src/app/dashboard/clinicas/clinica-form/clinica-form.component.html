@@ -1,0 +1,92 @@
+<form class="plan-form" autocomplete="off" [formGroup]="clinicaForm" (ngSubmit)="submitForm()">
+ 
+  <div class="col-12">
+  <div class="card">
+      <!-- <h5>Complete los campos </h5> -->
+      <div class="p-fluid p-formgrid grid">
+          <div class="field col-6 md:col-6">
+              <label htmlFor="nombre">Nombre</label>
+              <input pInputText id="nombre" type="text" formControlName="nombre" placeholder="ej: CLINICA PRIVADA DE OJOS SANTA LUCIA" required/>
+          </div>
+        <div class="field col-6 md:col-">
+              <label htmlFor="entity">Nombre abreviado</label>
+              <input pInputText id="entity" type="text" formControlName="entity" placeholder="ej: Cl. Priv. De Ojos Sta. Lucia" required/>
+          </div>
+        <div hidden class="field col-12">
+              <label htmlFor="address">Planes</label>
+              <input pInputTextarea id="cartillas" formControlName="cartillas" placeholder="" />
+
+          </div>
+          <div class="col-12 md:col-6">
+            <!-- Ancho de 50% para el panelMenu -->
+            <div class="w-full md:w-20rem">
+              <!-- Aplicar clase del "botón" -->
+              <span class="coberturas-button" (click)="mostrarCoberturas()">
+                {{ showPanelMenu ? 'Ocultar Coberturas' : 'Mostrar Coberturas' }}
+              </span><br><br><br>
+              <div *ngIf="showPanelMenu">
+                <p-panelMenu [multiple]="false" [model]="panelMenuItems" [style]="{ 'width':'300px' }"></p-panelMenu>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 md:col-6">
+            <!-- Ancho de 50% para el p-treeSelect -->
+            <div class="tree-select-container" (click)="mostrarCoberturas()">
+          <p-treeSelect #treeSelect class="w-full" containerStyleClass="w-full" formControlName="coberturas"
+          [options]="arbol" display="chip" [metaKeySelection]="true" selectionMode="checkbox" placeholder="Selecciona Coberturas"
+          (click)="mostrarCoberturas()"
+          >
+        </p-treeSelect>  
+       </div>
+      </div>
+            <!-- <div class="col-12 md:col-6">
+              <div class="tree-select-container">
+                <p-treeSelect #tree class="w-full" containerStyleClass="w-full" [options]="arbol"
+                selectionMode="checkbox" display="chip" [metaKeySelection]="true" 
+                formControlName="coberturas" placeholder="Selecciona Coberturas"
+                (click)="obtenerIDsSeleccionados()">
+        </p-treeSelect>
+              </div>
+            </div> -->
+     
+            
+      <div class="col-12 md:col-6">
+
+  
+              <p-megaMenu [model]="megaMenuItems" orientation="vertical" [style]="{'width':'200px'}"></p-megaMenu>
+         
+      </div>      
+ 
+
+              <div class="field col-12">
+              <label htmlFor="address">Address</label>
+              <input pInputTextarea id="address" rows="4" />
+          </div>
+          <div class="field col-12 md:col-6">
+              <label htmlFor="city">City</label>
+              <input pInputText id="city" type="text" />
+          </div>
+          <div class="field col-12 md:col-3">
+              <label htmlFor="state">Región</label>
+          </div>
+          <div class="field col-12 md:col-3">
+              <label htmlFor="zip">Zip</label>
+              <input pInputText id="zip" type="text" />
+          </div>
+      </div>
+      <div class="m-2">
+       
+          <button type="submit" pButton pRipple [label]="buttonText" icon="pi pi-plus" class="p-button-success mr-2" (click)="obtenerIDsSeleccionados()" [disabled]="clinicaForm.invalid"></button>
+          <button type="button" pButton pRipple label="Cancelar" icon="pi pi-trash" class="p-button-danger" (click)="cancelarDialogo();" ></button>
+      </div>
+      
+     </div>
+
+</div>
+
+
+</form>
+
+
+
+
