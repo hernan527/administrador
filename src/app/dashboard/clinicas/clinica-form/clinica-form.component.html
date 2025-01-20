@@ -75,8 +75,9 @@
           </div>
       </div>
       <div class="m-2">
-       
-          <button type="submit" pButton pRipple [label]="buttonText" icon="pi pi-plus" class="p-button-success mr-2" (click)="obtenerIDsSeleccionados()" [disabled]="clinicaForm.invalid"></button>
+        <button  pButton pRipple [label]="buttonText" icon="pi pi-plus" class="p-button-success mr-2"  [disabled]="clinicaForm.invalid"></button>
+
+          <button type="submit" pButton pRipple [label]="buttonText" icon="pi pi-plus" class="p-button-success mr-2"  [disabled]="clinicaForm.invalid"></button>
           <button type="button" pButton pRipple label="Cancelar" icon="pi pi-trash" class="p-button-danger" (click)="cancelarDialogo();" ></button>
       </div>
       

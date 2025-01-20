@@ -17,7 +17,7 @@ import { TreeNode } from 'primeng/api'; // Importa la interfaz TreeNode directam
 import { Tree } from 'primeng/tree';
 @Component({
   selector: 'app-clinicas-form',
-  templateUrl: './clinica-form.component.html',
+  templateUrl: './clinica-form.component-1.html',
   styleUrls: [ './clinica-form.component.css',  ],
 
 })
@@ -57,13 +57,52 @@ export class ClinicasFormComponent implements OnInit {
     ) { 
 
     }
+    get nombre() {
+      const nombreControl = this.clinicaForm.get('nombre');
+      if (nombreControl) {
+        console.log('nombre:', nombreControl.value);
+        return nombreControl.value;
+      }
+      return null;
+    }
+    
+    get clinicas() {
+      const clinicasControl = this.clinicaForm.get('entity');
+      if (clinicasControl) {
+        console.log('clinicas:', clinicasControl.value);
+        return clinicasControl.value;
+      }
+      return null;
+    }
+    
+    get cartillas() {
+      const cartillasControl = this.clinicaForm.get('cartillas');
+      if (cartillasControl) {
+        console.log('cartillas:', cartillasControl.value);
+        return cartillasControl.value;
+      }
+      return null;
+    }
+    
+    get coberturas() {
+      const coberturasControl = this.clinicaForm.get('coberturas');
+      if (coberturasControl) {
+        console.log('coberturas: 91', coberturasControl.value);
+        
+        return coberturasControl.value;
+      }
+      return null;
+    }
+    
 
-
-
+ 
 
      
 ngOnInit() {
-
+  // Suscribirse a los cambios en 'coberturas'
+  this.clinicaForm.get('coberturas')?.valueChanges.subscribe((coberturasSeleccionadas) => {
+    this.actualizar_MenuPanel();
+  });
   this.clinicasService.getClinicas().pipe(
     map((clinicas: any[]) => {
       this.generated_ids = clinicas.map(clinica => clinica._id);    })
@@ -92,26 +131,31 @@ ngOnInit() {
         this.isEditMode = true;
         const coberturasSeleccionadas = this.clinicaForm.get('coberturas')?.value;
         console.log('coberturasSeleccionadas  110',coberturasSeleccionadas);
-       this.mostrarCoberturas()
+        const idsSeleccionados = this.obtenerIDsSeleccionados();
+        console.log('idsSeleccionados 123',idsSeleccionados);
+        this.generateMenuLevelOne();
       } 
-     
+      
+
     });
   
     const currentClinicaState = this.clinicaForm.get('_id')
     // console.log('currentClinicaState  : ',currentClinicaState)
     
-    
+    this.mostrarCoberturas()
 
     this.clinicaForm.valueChanges.subscribe((val) => { this.formValuesChanged.emit(val); });
   }
  
   
- 
+  actualizar_MenuPanel() {
+    const coberturasSeleccionadas = this.clinicaForm.get('coberturas')?.value;
+    this.desarrollar_MenuPanel(coberturasSeleccionadas);
+  }
   mostrarCoberturas() {
    
 
-    const idsSeleccionados = this.obtenerIDsSeleccionados();
-    console.log('idsSeleccionados 123',idsSeleccionados);
+
 
     this.showPanelMenu = !this.showPanelMenu; // Cambia el valor entre true y false
     this.generateMenuLevelOne();
@@ -127,7 +171,7 @@ ngOnInit() {
     this.empresasService.getEmpresas().subscribe(empresas => {
       
       // Log para ver los datos que llegan del servicio
-      console.log('Datos recibidos de empresasService:', empresas);
+      // console.log('Datos recibidos de empresasService:', empresas);
   
       // Mapeamos las empresas para crear la estructura de menú
       this.menuData.data = empresas.map((empresa, index) => ({
@@ -140,7 +184,7 @@ ngOnInit() {
       console.log('Estructura de menuData:', this.menuData);
   
       // Si tienes datos en 'planesData', también puedes logearlos aquí
-      console.log('Planes de datos disponibles:', this.planesData);
+      // console.log('Planes de datos disponibles:', this.planesData);
   
       // Llamar a la función para generar el segundo nivel del menú
       
@@ -154,7 +198,7 @@ ngOnInit() {
 generateMenuLevelTwo(): void {
   console.log('Ejecutando generateMenuLevelTwo()');
   this.planesService.getPlanes().subscribe(planes => {
-    console.log('Datos recibidos de planesService:', planes);
+    // console.log('Datos recibidos de planesService:', planes);
 
     planes.forEach((plan, planIndex) => {
       // Encontrar la empresa correspondiente en menuData
@@ -215,6 +259,9 @@ generateMenuLevelTwo(): void {
   // console.log('menuLabels 202',menuLabels) 
    // console.log('this.menuData 203',this.menuData);
   this.arbol = [...this.menuData.data];
+  console.log('this.menuData.data : 254',this.menuData.data)
+
+  console.log('arbol : 254',this.arbol)
 }
   generateArraysFromMenuLabels(menuLabels: { [x: string]: string }): { [x: string]: any[] } {
     const result: { [x: string]: any[] } = {};
@@ -283,31 +330,31 @@ generateMenuLevelTwo(): void {
     if (Array.isArray(coberturasSeleccionadas)) {
       coberturasSeleccionadas.forEach((cobertura: any) => {
         console.log('Cobertura actual:', cobertura);
-        
-        // Si la cobertura tiene id, la agregamos
-        if (cobertura?.id) {
-          // console.log('ID encontrado:', cobertura.id);
+                // Si la cobertura tiene un array de 'children', los procesamos también
+                if (Array.isArray(cobertura.children)) {
+                  cobertura.children.forEach((child: any) => {
+                    // Recursión para extraer ids de los hijos
+                    if (child?.id) {
+                      // console.log('ID del hijo encontrado:', child.id);
+                      idsSeleccionados.push(child.id);
+                    }
+                  });
+                }
+        // // Si la cobertura tiene id, la agregamos
+        // if (cobertura?._id) {
+        //   // console.log('ID encontrado:', cobertura.id);
           
-          // Si el id es un arreglo, agregamos todos sus elementos
-          if (Array.isArray(cobertura.id)) {
-            // console.log('ID es un arreglo, agregando varios IDs');
-            idsSeleccionados.push(...cobertura.id);
-          } else {
-            // console.log('ID es un único valor, agregando');
-            idsSeleccionados.push(cobertura.id);
-          }
-        }
+        //   // Si el id es un arreglo, agregamos todos sus elementos
+        //   if (Array.isArray(cobertura._id)) {
+        //     // console.log('ID es un arreglo, agregando varios IDs');
+        //     idsSeleccionados.push(...cobertura._id);
+        //   } else {
+        //     // console.log('ID es un único valor, agregando');
+        //     idsSeleccionados.push(cobertura._id);
+        //   }
+        // }
         
-        // Si la cobertura tiene un array de 'children', los procesamos también
-        if (Array.isArray(cobertura.children)) {
-          cobertura.children.forEach((child: any) => {
-            // Recursión para extraer ids de los hijos
-            if (child?.id) {
-              // console.log('ID del hijo encontrado:', child.id);
-              idsSeleccionados.push(child.id);
-            }
-          });
-        }
+
       });
     }
   
@@ -318,7 +365,7 @@ generateMenuLevelTwo(): void {
     this.desarrollar_MenuPanel(coberturasSeleccionadas);
     const datosTransformados = this.transformarDatos(coberturasSeleccionadas);
     this.datosTrans = datosTransformados;
-    console.log('Datos datosTrans:', this.datosTrans);
+    // console.log('Datos datosTrans:', this.datosTrans);
   
     // Se actualiza el formulario con los IDs seleccionados
     this.clinicaForm.patchValue({ cartillas: idsSeleccionados });
@@ -435,12 +482,16 @@ convertData(data: any[]): any[] {
     
   submitForm() {
     const formValue = this.clinicaForm.value;
+    console.log(this.isEditMode)
     // console.log(this.isEditMode)
     // Realizar acciones según el contexto (agregar o editar)
-    if  (this.isEditMode == true) {
+    if  (this.isEditMode === true) {
       // Acciones para editar clínica
       // ...
-      formValue.coberturas.forEach((cobertura: { parent: any; }) => {
+    
+      formValue.coberturas.forEach((cobertura: { parent: any }) => {
+        console.log('cobertura :',cobertura);
+        console.log('cobertura.parent; :',cobertura.parent);
         delete cobertura.parent;
       });
 
@@ -472,8 +523,11 @@ generarItemsPorEmpresa(planesSeleccionados: PlanSeleccionado[]): { [x: string]: 
   const itemsPorEmpresa: { [x: string]: any[] } = {};
 console.log('planesSeleccionados  473  :',planesSeleccionados)
   planesSeleccionados.forEach((plan) => {
+    console.log('plan 520',plan)
+
     const empresa = plan.key.charAt(0);
-    if (plan.hasOwnProperty('id')) {
+    console.log('empresa 530',empresa)
+    if (plan.hasOwnProperty('_id')) {
       if (!itemsPorEmpresa[empresa]) {
         itemsPorEmpresa[empresa] = [];
       }

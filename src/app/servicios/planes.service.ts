@@ -29,6 +29,9 @@ export class PlanesService {
     return this.planes$;
   }
 
+  actrualizarClinicas(){
+    
+  }
   getPlan(id: string): Observable<Planes> {
     return this.httpClient.get<Planes>(`${this.url}/planes/${id}`);
   }
